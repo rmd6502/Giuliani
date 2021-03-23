@@ -11,6 +11,7 @@ class SearchParametersController : UIViewController {
   var count : Int = 5
   var difficulty : Int = 1
   var delegate : SearchingProtocol?
+  @IBOutlet weak var countLabel: UILabel!
 
   @IBOutlet weak var difficultyButtons: UISegmentedControl!
   @IBOutlet weak var numberOfStudies: UISlider!
@@ -18,10 +19,12 @@ class SearchParametersController : UIViewController {
   override func viewDidLoad() {
     super.viewDidLoad()
     numberOfStudies.isContinuous = false
+    countLabel.text = "\(count)"
   }
 
   @IBAction func updateNumberOfStudies(_ sender: UISlider) {
     count = Int(sender.value)
+    countLabel.text = "\(count)"
   }
   @IBAction func updateDifficulty(_ sender: UISegmentedControl) {
     difficulty = sender.selectedSegmentIndex + 1
