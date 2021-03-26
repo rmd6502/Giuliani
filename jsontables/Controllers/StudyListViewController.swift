@@ -64,6 +64,10 @@ class StudyListViewController: UITableViewController, SearchingProtocol {
   override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
     self.tableView.reloadData()
   }
+    
+    override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        print("Displaying \(indexPath) height \(tableImageHeights[indexPath.item])")
+    }
 
   override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
      // Fetch a cell of the appropriate type.
@@ -78,11 +82,16 @@ class StudyListViewController: UITableViewController, SearchingProtocol {
         if let image = images[study.studyPath] {
           cell.studyImage?.image = image
           let ratio = image.size.height / image.size.width
+            if (tableImageHeights[indexPath.item] == nil) {
           tableImageHeights[indexPath.item] = cell.studyNumber.sizeThatFits(cell.contentView.bounds.size).height + 8 + cell.contentView.bounds.size.width * ratio
+            }
         } else {
-          tableImageHeights[indexPath.item] = cell.studyNumber.sizeThatFits(cell.contentView.bounds.size).height + 16
-          URLSession(configuration: .default).dataTask(with: imageUrl) {
+            if (tableImageHeights[indexPath.item] == nil) {
+          tableImageHeights[indexPath.item] = cell.studyNumber.sizeThatFits(cell.contentView.bounds.size).height + 8
+            }
+          URLSession(configuration: .default).dataTask(with: imageUrl) { [weak self]
             data, response, error in
+            guard let self = self else { return }
             if error != nil {
               print(error?.localizedDescription ?? "problem fetching URL")
               return
@@ -93,8 +102,9 @@ class StudyListViewController: UITableViewController, SearchingProtocol {
               return
             }
             if let data = data {
-              DispatchQueue.main.async {
                 if let image = UIImage(data: data) {
+                    DispatchQueue.main.async { [weak self] in
+                        guard let self = self else { return }
                   cell.studyImage?.image = image
                   let ratio = image.size.height / image.size.width
                   tableView.beginUpdates()

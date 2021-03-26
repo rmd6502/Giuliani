@@ -12,7 +12,7 @@ class StudyDataSource {
   lazy var fetchSession = URLSession(configuration: .default, delegate: nil, delegateQueue: fetchQueue)
   let DEFAULT_DIFFICULTY = 1
   let DEFAULT_COUNT=5
-  var endpoint = "http://rmd-linux.local:5000"
+  var endpoint = "http://localhost:5000"
   var dataTask : URLSessionDataTask?
 
   func fetchStudies(difficulty : Int?, count : Int?, completion : @escaping (_ data : [Study]?, _ error : Error?) -> Void) {
