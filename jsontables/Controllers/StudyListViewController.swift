@@ -64,10 +64,6 @@ class StudyListViewController: UITableViewController, SearchingProtocol {
   override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
     self.tableView.reloadData()
   }
-    
-    override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        print("Displaying \(indexPath) height \(tableImageHeights[indexPath.item])")
-    }
 
   override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
      // Fetch a cell of the appropriate type.
