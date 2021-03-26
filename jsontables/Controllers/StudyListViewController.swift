@@ -88,7 +88,7 @@ class StudyListViewController: UITableViewController, SearchingProtocol {
             if (tableImageHeights[indexPath.item] == nil) {
           tableImageHeights[indexPath.item] = cell.studyNumber.sizeThatFits(cell.contentView.bounds.size).height + 8
             }
-            cell.studyImage.image = UIImage()
+            images[study.studyPath] = UIImage()
           URLSession(configuration: .default).dataTask(with: imageUrl) { [weak self]
             data, response, error in
             guard let self = self else { return }
@@ -106,6 +106,7 @@ class StudyListViewController: UITableViewController, SearchingProtocol {
                     DispatchQueue.main.async { [weak self, weak cell] in
                         guard let self = self, let cell = cell else { return }
                   cell.studyImage?.image = image
+                        self.images[study.studyPath] = image
                   let ratio = image.size.height / image.size.width
                   tableView.beginUpdates()
                   self.tableImageHeights[indexPath.item] = cell.studyNumber.sizeThatFits(cell.contentView.bounds.size).height + 8 + cell.contentView.bounds.size.width * ratio
