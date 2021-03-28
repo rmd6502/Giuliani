@@ -7,13 +7,31 @@
 
 import Foundation
 
+struct Config : Codable {
+    var endpoint : String
+}
+
 class StudyDataSource {
   lazy var fetchQueue = OperationQueue()
   lazy var fetchSession = URLSession(configuration: .default, delegate: nil, delegateQueue: fetchQueue)
   let DEFAULT_DIFFICULTY = 1
   let DEFAULT_COUNT=5
-  var endpoint = "http://localhost:5000"
+    var endpoint : String
   var dataTask : URLSessionDataTask?
+
+    init() {
+        endpoint = "http://localhost:5000"
+        if let configPlist = Bundle.main.path(forResource: "config", ofType: "plist") {
+            if let configData = FileManager.default.contents(atPath: configPlist) {
+                do {
+                    let config = try PropertyListDecoder().decode(Config.self, from: configData)
+                    endpoint = config.endpoint
+                } catch {
+                    print(error)
+                }
+            }
+        }
+    }
 
   func fetchStudies(difficulty : Int?, count : Int?, completion : @escaping (_ data : [Study]?, _ error : Error?) -> Void) {
     dataTask?.cancel()
