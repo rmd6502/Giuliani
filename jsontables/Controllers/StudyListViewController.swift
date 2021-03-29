@@ -62,6 +62,7 @@ class StudyListViewController: UITableViewController, SearchingProtocol {
   }
 
   override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+    tableImageHeights.removeAll()
     self.tableView.reloadData()
   }
 
